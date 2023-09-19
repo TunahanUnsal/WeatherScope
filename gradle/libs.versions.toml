@@ -1,5 +1,5 @@
 [versions]
-agp = "8.1.0"
+agp = "8.2.0-alpha16"
 glide = "4.15.1"
 hilt-android = "2.47"
 hilt-compiler = "2.44"
