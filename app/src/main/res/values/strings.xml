@@ -1,12 +1,3 @@
 <resources>
-    <string name="app_name">Bitcoin Ticker</string>
-    <string name="version">V</string>
-    <string name="powered_by">Powered by</string>
-    <string name="search_hint">Search Coin</string>
-    <string name="default_web_client_id">AIzaSyDUrtfe6VwXpC-wpnYwalDoGMupBsvdMN4</string>
-    <string name="algorithm">Hashing Algorithm : </string>
-    <string name="change_price">Price Change Last 24 Hours : </string>
-    <string name="description">Description : </string>
-    <string name="fav_active">Showing favorites</string>
-    <string name="fav_closed">Not Showing favorites</string>
+    <string name="app_name">Weather Scope</string>
 </resources>

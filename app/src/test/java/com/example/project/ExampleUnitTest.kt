@@ -1,4 +1,4 @@
-package com.example.project
+package com.ezdream.weather
 
 import org.junit.Test
 
