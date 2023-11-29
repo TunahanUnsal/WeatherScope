@@ -9,7 +9,7 @@ class WeatherRepositoryImpl @Inject constructor(private val service: WeatherServ
     WeatherRepository {
 
 
-    override fun getWeather(lat: String?, lon: String?, key: String?): Flow<WeatherResponse> =
-        sendRequest { service.getWeather(lat!!, lon!!, key!!) }
+    override fun getWeather(lat: String?, lon: String?, key: String?,units:String?): Flow<WeatherResponse> =
+        sendRequest { service.getWeather(lat!!, lon!!, key!!, units!!) }
 
 }

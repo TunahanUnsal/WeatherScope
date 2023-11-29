@@ -17,7 +17,7 @@ class WeatherUseCase @Inject constructor(private val repository: WeatherReposito
 
     override fun execute(parameter: Params?): Flow<WeatherResponse> {
 
-        return repository.getWeather(parameter!!.lon,parameter.lon,parameter.key)
+        return repository.getWeather(parameter!!.lon,parameter.lon,parameter.key,"metric")
     }
 
 }

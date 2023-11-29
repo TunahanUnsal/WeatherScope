@@ -30,7 +30,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
-        val duration = getDuration(applicationContext,R.drawable.splash)
+        val duration = getDuration(applicationContext,R.drawable.splash_3)
         val background = object : Thread() {
             override fun run() {
                 try {

@@ -83,6 +83,9 @@ dependencies {
     testImplementation libs.junit
     androidTestImplementation libs.androidx.test.ext.junit
     implementation libs.android.gif.drawable
+    implementation 'com.github.MatteoBattilana:WeatherView:3.0.0'
+    implementation 'com.github.ybq:Android-SpinKit:1.4.0'
+
 
 
 }
