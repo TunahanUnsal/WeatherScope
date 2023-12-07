@@ -2,12 +2,15 @@ package com.ezdream.weather.ui.home
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.view.animation.Animation
@@ -19,6 +22,9 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.ezdream.weather.R
 import com.ezdream.weather.databinding.ActivityHomeBinding
+import com.ezdream.weather.util.LocateManager
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -27,13 +33,16 @@ import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
-class HomeActivity : AppCompatActivity(), LocationListener {
+class HomeActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHomeBinding
     private lateinit var viewModel: HomeActivityVM
-    private lateinit var locationManager: LocationManager
     private val locationPermissionCode = 2
     private lateinit var animBlink: Animation
+    private var flag = true
+
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var locationManager: LocateManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +53,9 @@ class HomeActivity : AppCompatActivity(), LocationListener {
         viewModel = ViewModelProvider(this)[HomeActivityVM::class.java]
         setContentView(binding.root)
 
-        getLocation()
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        locationManager = LocateManager(this)
+
 
         animBlink = AnimationUtils.loadAnimation(
             this,
@@ -65,63 +76,54 @@ class HomeActivity : AppCompatActivity(), LocationListener {
 
     }
 
-    private fun getLocation() {
-        locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        if ((ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED)
-        ) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                locationPermissionCode
-            )
-        }
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5f, this)
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == locationPermissionCode) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show()
-            }
+    override fun onResume() {
+        super.onResume()
+        locationManager.checkLocationServices()
+        if (locationManager.checkLocationPermission()) {
+            requestLocation()
+        } else {
+            requestLocationPermission()
         }
     }
 
-    @SuppressLint("SetTextI18n")
-    override fun onLocationChanged(p0: Location) {
-        Log.i("TAG", "onLocationChanged: ${p0.latitude}-${p0.longitude}")
-        CoroutineScope(Dispatchers.IO).launch {
-            val response = async {
-                viewModel.getWeatherFun(
-                    this@HomeActivity,
-                    binding.tempText,
-                    binding.feelText,
-                    binding.cityText,
-                    binding.imageView,
-                    p0.latitude.toString(),
-                    p0.longitude.toString(),
-                    binding.weatherView
-                )
-            }
-            response.await()
-            runOnUiThread {
-                binding.imageView2.visibility = View.VISIBLE
-                binding.spinKit.visibility = View.GONE
-                binding.imageView2.startAnimation(animBlink)
-            }
-        }
-
-
+    private fun requestLocationPermission() {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+            1001
+        )
     }
 
+    private fun requestLocation() {
+        locationManager.getDeviceLocation { location: Location? ->
+            location?.let {
+                val latitude = it.latitude
+                val longitude = it.longitude
 
+                flag = true
+
+                CoroutineScope(Dispatchers.IO).launch {
+                    val response = async {
+                        viewModel.getWeatherFun(
+                            this@HomeActivity,
+                            binding.tempText,
+                            binding.feelText,
+                            binding.cityText,
+                            binding.imageView,
+                            latitude.toString(),
+                            longitude.toString(),
+                            binding.weatherView
+                        )
+                    }
+                    response.await()
+                    runOnUiThread {
+                        binding.imageView2.visibility = View.VISIBLE
+                        binding.spinKit.visibility = View.GONE
+                        binding.imageView2.startAnimation(animBlink)
+                    }
+                }
+
+            }
+        }
+    }
 }

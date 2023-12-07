@@ -1,22 +1,19 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Theme.TempleteProject" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Primary brand color. -->
         <item name="colorPrimary">@android:color/transparent</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/black</item>
         <item name="android:actionBarStyle">@style/action_bar_theme</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:fontFamily">@font/india_flower</item>
-        <!-- Secondary brand color. -->
+        <item name="android:navigationBarColor">@color/black</item>
         <item name="colorSecondary">@color/teal_200</item>
+        <item name="android:windowTranslucentStatus">true</item>
         <item name="colorSecondaryVariant">@color/teal_700</item>
         <item name="colorOnSecondary">@color/black</item>
         <item name="android:windowDisablePreview">true</item>
-
-        <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
     </style>
 
     <style name="action_bar_theme" parent="@android:style/Widget.Holo.ActionBar">

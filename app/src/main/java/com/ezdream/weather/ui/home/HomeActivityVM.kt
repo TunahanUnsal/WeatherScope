@@ -22,7 +22,7 @@ class HomeActivityVM @Inject constructor(
     private val weatherUseCase: WeatherUseCase
 ) : ViewModel() {
 
-    @SuppressLint("UseCompatLoadingForDrawables")
+    @SuppressLint("UseCompatLoadingForDrawables", "SetTextI18n")
     suspend fun getWeatherFun(
         activity: Activity,
         temp: TextView,
@@ -74,7 +74,5 @@ class HomeActivityVM @Inject constructor(
                 3->view.setWeatherData(PrecipType.CLEAR)
             }
         }
-
-
     }
 }
