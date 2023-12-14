@@ -1,4 +1,4 @@
-Play Store link: <https://play.google.com/store/apps/details?id=com.ezdream.weather&hl=tr&gl=US>
+Play Store link: <https://play.google.com/store/apps/details?id=com.ezdream.weather>
 
 
 
